@@ -11,7 +11,7 @@ async function scrapeLinkedInJobs() {
     headless: false,
     defaultViewport: null,
     args: ["--start-maximized"],
-    executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", // change if needed
   });
 
   const page = await browser.newPage();
@@ -60,7 +60,13 @@ async function scrapeLinkedInJobs() {
       const link = relativeLink ? `https://www.linkedin.com${relativeLink}` : null;
 
       if (title && company && link) {
-        jobList.push({ title, company, location, link });
+        jobList.push({
+          platform: "LinkedIn",
+          title,
+          company,
+          location,
+          link,
+        });
       }
     });
 
@@ -86,11 +92,12 @@ async function autoScroll(page) {
       const timer = setInterval(() => {
         window.scrollBy(0, distance);
         totalHeight += distance;
+
         if (totalHeight >= document.body.scrollHeight) {
           clearInterval(timer);
           resolve();
         }
-      }, 250);
+      }, 200); // slightly faster scroll
     });
   });
 }
